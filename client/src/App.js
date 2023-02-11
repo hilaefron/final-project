@@ -7,6 +7,7 @@ import Attractions from './components/attractions';
 import { Routes, Route } from "react-router-dom";
 import HomePage from './components/homePage';
 import { BrowserRouter } from 'react-router-dom';
+import Flights from './components/flights';
 
 function App() {
 
@@ -22,9 +23,10 @@ function App() {
   //     </BrowserRouter>
 
 <div>
-  <Hotels/>
+  {/* <Hotels/>
   <Resturants/>
-  <Attractions/> 
+  <Attractions/>  */}
+  <Flights/>
 </ div>
   )
 }

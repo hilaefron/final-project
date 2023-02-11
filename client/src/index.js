@@ -7,18 +7,22 @@ import UserProvider from './components/signUp';
 import AuthPasswordsProvider from './components/login';
 import HomePage from './components/homePage';
 import AppLogin from './components/LoginAndSignUp';
+import FlightsContextProvider from './components/flightsContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <HomePage>
+    {/* <HomePage>
       <UserProvider>
-        <AuthPasswordsProvider>
+        <AuthPasswordsProvider> */}
+          <FlightsContextProvider>
+
           <App/>
-        </AuthPasswordsProvider>
+          </FlightsContextProvider>
+        {/* </AuthPasswordsProvider>
       </UserProvider>
-    </HomePage>
+    </HomePage> */}
   </React.StrictMode>
   
   // <React.StrictMode>
