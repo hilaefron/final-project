@@ -6,11 +6,15 @@ import {HomePageContext} from './homePage'
 import { Link } from 'react-router-dom';
 
 const Resturants = () => {
-    const {selectedOption, handlePrice, filteredArrayResturants,updateUserOrder} = useContext(HomePageContext);
+    const {selectedOption, handlePrice, filteredArrayResturants,updateUserOrder, cityName} = useContext(HomePageContext);
+
+
+    console.log("hey from resturants")
+    console.log(filteredArrayResturants)
 
   return (
     <div>
-      <h1>Resturants</h1>
+       <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Restaurants {cityName}</h1>
 
           <select value={selectedOption} onChange={handlePrice}>
               <option >Select Type</option>
@@ -24,18 +28,22 @@ const Resturants = () => {
               <option value={"$$$$"} >110$-200$</option>
           </select>
 
-      <div style={{display:"flex", justifyContent:"space-between", flexDirection:"row"}}>
+      <div  style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",}}
+          >
         
         {filteredArrayResturants.map((val, index)=>{
           return (
-              <div>              
+              <div style={{display: "flex",  justifyContent: "center"}}>              
                 <Card   
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  border: "solid black",
-                }}>
-                  <Card.Img variant="top" src={val.photo} style={{width:"66.6vh", height:400}}/>
+                   style={{
+                    width: "37.44%",
+                    height: "100%",
+                    border: "solid black",
+                  }}>
+                  <Card.Img variant="top" src={val.photo} style={{ width: "100%", height: "40vh" }}/>
                   <Card.Body>
                     <Card.Title>Resturants</Card.Title>
                     <Card.Text >

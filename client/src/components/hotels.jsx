@@ -9,14 +9,15 @@ import { color } from '@mui/system';
 
 
 const Hotels = () => {
-const {filteredArray, days,updateUserOrder,cityName, budjet} = useContext(HomePageContext);
+const {filteredArray, days,updateUserOrder,cityName} = useContext(HomePageContext);
 
 
 
 
 return (
   // style={{background: "linear-gradient(to right, #0466c8, #0466c8)"}}
-    <div className='hotels' >
+  <div className='hotels' >
+      
       <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Hotels {cityName}</h1>
       <div className='hotels'
         style={{
@@ -67,7 +68,7 @@ return (
                   <Button
                     variant="dark"
                     className='hotels'
-                    onClick={() =>{updateUserOrder(val,budjet)}}
+                    onClick={() =>{updateUserOrder(val)}}
                   >
                       Add to order
                   </Button>

@@ -8,26 +8,32 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from './components/homePage';
 import { BrowserRouter } from 'react-router-dom';
 import Flights from './components/flights';
+import LoginApp from './components/loginApp';
+import SignUpApp from './components/signUpApp';
+import NavBar from './components/navbar';
+import HomepageApp from './components/homepageApp';
 
 function App() {
 
   return (
-  //     <BrowserRouter>
-  //       <Routes>
-  //         <Route path="/" element={<Hotels />} />
-  //         <Route path="/resturants" element={<Resturants />} />
-  //         <Route path="/attractions" element={<Attractions />} />
-  //         {/* <Route path="/login" element={<AppLogin />} /> */}
-  //         <Route path="/flights" />
-  //       </Routes> 
-  //     </BrowserRouter>
+      <BrowserRouter>
+  {window.location.pathname !== "/login" && window.location.pathname !== "/signup" && window.location.pathname !== "/"&&<NavBar />}
+        <Routes>
+          <Route path="/" element={<HomepageApp/>}/> 
+          <Route path="/hotels" element={<Hotels />} />
+          <Route path="/restaurants" element={<Resturants/>} />
+          <Route path="/attractions" element={<Attractions />} />
+          <Route path="/login" element={<LoginApp />} />
+          <Route path="/signup" element={<SignUpApp />} />
+          {/* <Route path="/flights" /> */}
+        </Routes> 
+      </BrowserRouter>
+      // <div>
+      // <SignUpApp/>
+      // <LoginApp/>
+      // </div>
 
-<div>
-  {/* <Hotels/>
-  <Resturants/>
-  <Attractions/>  */}
-  <Flights/>
-</ div>
+
   )
 }
 

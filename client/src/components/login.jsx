@@ -26,7 +26,8 @@ function AuthPasswordsProvider(props) {
       setErr("User Confirmed");
       setTimeout(() => {
         setErr(`Welcome ${Name} 🔓 `);
-      }, 1000);
+      }, 3000);
+      window.location.href = "/";
       setTimeout(() => {
         setErr("welcome there");
       }, 40000);

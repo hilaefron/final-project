@@ -13,16 +13,16 @@ import FlightsContextProvider from './components/flightsContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <HomePage>
+    <HomePage>
       <UserProvider>
-        <AuthPasswordsProvider> */}
-          <FlightsContextProvider>
+        <AuthPasswordsProvider>
+          {/* <FlightsContextProvider> */}
 
           <App/>
-          </FlightsContextProvider>
-        {/* </AuthPasswordsProvider>
+          {/* </FlightsContextProvider> */}
+        </AuthPasswordsProvider>
       </UserProvider>
-    </HomePage> */}
+    </HomePage>
   </React.StrictMode>
   
   // <React.StrictMode>

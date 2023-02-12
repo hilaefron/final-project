@@ -14,25 +14,24 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 export const HomePageContext = createContext();
 const HomePage = (props) => {
-    const {children} = props;
+  const {children} = props;
+  ////////////////////////////////////////////////////hotels data
+  const [name, setName] = useState('')
+  const [cityName, setCityName] = useState('')
+  const [lat, setLat] = useState('');
+  const [lng, setLng] = useState('');
+  const [cityData, setCityData] = useState([]);
+  const [selectedCity, setSelectedCity] = useState('')
+  let arr = []
+  const [info, setInfo] = useState();
+  const[filteredArray,setFilteredArray] = useState([]);
+  let [num, setNum] = useState('');
+  const [days,setDays] = useState(1);
+  
+  const [loading, setLoading] = useState(false);
 
-////////////////////////////////////////////////////hotels data
-const [name, setName] = useState('')
-const [cityName, setCityName] = useState('')
-const [lat, setLat] = useState('');
-const [lng, setLng] = useState('');
-const [cityData, setCityData] = useState([]);
-const [selectedCity, setSelectedCity] = useState('')
-let arr = []
-const [info, setInfo] = useState();
-const[filteredArray,setFilteredArray] = useState([]);
-let [num, setNum] = useState('');
-const [days,setDays] = useState(1);
-
-const [loading, setLoading] = useState(false);
 
 
-const [budjet,setBudjet]=useState('')
 
 
 
@@ -64,7 +63,7 @@ async function getHotels() {
           currency: 'USD'
         },
         headers: {
-          'X-RapidAPI-Key': 'f9a74bd6bfmsh9a56fb732196713p1cbc4ajsndf852c3ff761',
+          'X-RapidAPI-Key': '54021a9f4dmshc95f6be939e33fbp1e4bd2jsn62da75b88810',
           'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
         }
       };
@@ -98,24 +97,22 @@ if (info!= undefined){
             ranking_position: val.ranking_position,
             hotel_class: val.hotel_class,
             distanceFromCenter: Math.round(val.distance*10)/10 + " KM",
+            budget:''
           });
         }
       });
 }
 
 
-async function updateUserOrder(val, budjet) {
+async function updateUserOrder(val) {
   console.log(val)
-  console.log("budjet"+budjet)
 let body = val
-let budjetValue = budjet
   const token = localStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const id =  decodedToken._id;
   try {
     const res = await axios.put(`http://localhost:4000/api/users/${id}`, {
       body,
-      budjet: budjetValue
     });
     return res.body;
   } catch (error) {
@@ -193,7 +190,7 @@ let budjetValue = budjet
             .map(Number);
             priceMin = priceMin * kefel*diffDays;
             priceMax = priceMax * kefel*diffDays;
-            setBudjet("$" + priceMax)
+            anotherFilteredArray[i].budget = "$" + priceMax;
             let newPrice = "$" + priceMin + " - " + "$" + priceMax;
           anotherFilteredArray[i].price = newPrice;
           console.log(anotherFilteredArray[i])
@@ -221,7 +218,7 @@ let budjetValue = budjet
               lunit: 'km'
             },
             headers: {
-              'X-RapidAPI-Key': 'f9a74bd6bfmsh9a56fb732196713p1cbc4ajsndf852c3ff761',
+              'X-RapidAPI-Key': '54021a9f4dmshc95f6be939e33fbp1e4bd2jsn62da75b88810',
               'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
             }
           };
@@ -259,6 +256,7 @@ if(infoResturants!=undefined){
 
 
 const handlePrice =(e)=>{
+  console.log(e)
   console.log("hey")
   setSelectedOption(e.target.value);
 
@@ -267,6 +265,7 @@ const handlePrice =(e)=>{
     console.log(filter)
     setFilteredArrayResturants(filter)
  }
+
 
   if(e.target.value == "$"){
      let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "$"); 
@@ -374,11 +373,10 @@ async function getAttraction() {
 
     },
     headers: {
-    'X-RapidAPI-Key': '97e4d9cb13msh7a0e4278afb4cfcp14917bjsn09bf4d37817e',
+    'X-RapidAPI-Key': '54021a9f4dmshc95f6be939e33fbp1e4bd2jsn62da75b88810',
     'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
     }
     };
-    
     try {
     const response = await axios.request(options);
     console.log(response.data);
@@ -507,7 +505,8 @@ function AnimatedText({ text }) {
   {!loading && (
     <>
       {/* get hotels and resturants! */}
-      <form onSubmit={e => getName(e)}>
+      
+      {/* <form onSubmit={e => getName(e)}>
         <input type="text" placeholder="enter city name" onChange={e => setName(e.target.value)} />
         <button type="submit"> get city </button>
       </form>
@@ -521,31 +520,22 @@ function AnimatedText({ text }) {
       </select>
 
       {lat && lng && (
-        <button onClick={() => { getHotels(); getRestaurants(); getAttraction(); }}>
+        <button onClick={() => { getHotels(); getRestaurants(); getAttraction(); handlePrice(); }}>
           Get All
         </button>
-      )}
+      )} */}
 
       {/* about te array of the hotels --  call the function that calc the new price by the changes*/}
       {/* set num = number of adults he put inside*/}
       {/* set selectedRange = ranges (user decided)*/}
       {/* */}
-      <form id="myForm" onSubmit={e => handleIn(e)}>
-        <label>number of adults</label>
-        <input type="number" onChange={e => setNum(e.target.value)} />
-        <br />
-        <label>Date range:</label>
-        <DateRange
-          onChange={handleRangeChange}
-          ranges={[selectedRange]}
-          showSelectionPreview={true}
-          minDate={new Date()}
-        />
-        <button type="submit">click</button>
-      </form>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+
+   
+      </div>
 
       <HomePageContext.Provider
-        value={{ filteredArray, days, selectedOption, handlePrice, filteredArrayResturants, arrAttractions, updateUserOrder,cityName, budjet }}
+        value={{ filteredArray, days, selectedOption, handlePrice, filteredArrayResturants, arrAttractions, updateUserOrder,cityName,getName,setName, setSelectedCity, getHotels, getRestaurants,getAttraction,arr,cityData,handleIn,setNum,handleRangeChange,selectedRange,lat,lng, selectedCity }}
       >
         {children}
       </HomePageContext.Provider>

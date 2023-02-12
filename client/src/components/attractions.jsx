@@ -7,20 +7,23 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Link } from 'react-router-dom';
 
 const Attractions = () => {
-const {arrAttractions, updateUserOrder} = useContext(HomePageContext);
+const {arrAttractions, updateUserOrder,cityName} = useContext(HomePageContext);
 
 
 return (
-    <div className='hotels'>
-      <h1>Attractions</h1>
-      <div className='hotels' style={{display: "flex",justifyContent: "space-between",flexDirection: "row"}}>
+    <div className='Attractions'>
+<h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Attractions {cityName}</h1>      
+  <div style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",}}>
+
+  
         {arrAttractions.map((val, index) => {
           return (
-            <div className='hotels'>
+            <div className='Attractions' style={{display: "flex",  justifyContent: "center"}}>
               <Card
                style={{
-                width: "100%",
-                height: "100%",
                 border: "solid black",
               }}
               >
@@ -75,6 +78,7 @@ return (
       </div>
   
         </div>
+        
     );
 }
 
