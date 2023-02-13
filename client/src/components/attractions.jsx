@@ -12,6 +12,11 @@ const {arrAttractions, updateUserOrder,cityName} = useContext(HomePageContext);
 
 return (
     <div className='Attractions'>
+                {arrAttractions.length > 0 ? (
+                  <div>
+
+                  
+
 <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Attractions {cityName}</h1>      
   <div style={{
           display: "flex",
@@ -56,7 +61,9 @@ return (
                     className='hotels'
                     onClick={() =>{updateUserOrder(val)}}
                   >
+                    
                     Add this hotel to my list!
+                    
                   </Button>
                   <a
                     href={`https://www.google.com/search?q=${val.name}&oq=${val.name}&aqs=chrome..69i57j69i64j69i60l3.190j0j7&sourceid=chrome&ie=UTF-8`}
@@ -76,7 +83,16 @@ return (
           );
         })}
       </div>
-  
+      </div>
+            ) : (
+              <div>
+              <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Attractions {cityName}</h1>
+          
+              <h1 style={{ display: "flex", justifyContent: "center" }}>
+              No data to present, please search for data first.
+            </h1>
+              </div>
+          )}
         </div>
         
     );

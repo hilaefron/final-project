@@ -1,6 +1,5 @@
 import './App.css';
 import React from 'react';
-import AppLogin from './components/LoginAndSignUp';
 import Hotels from './components/hotels';
 import Resturants from './components/resturants';
 import Attractions from './components/attractions';
@@ -12,12 +11,13 @@ import LoginApp from './components/loginApp';
 import SignUpApp from './components/signUpApp';
 import NavBar from './components/navbar';
 import HomepageApp from './components/homepageApp';
+import UserOrders from './components/order';
 
 function App() {
 
   return (
       <BrowserRouter>
-  {window.location.pathname !== "/login" && window.location.pathname !== "/signup" && window.location.pathname !== "/"&&<NavBar />}
+  {window.location.pathname !== "/login" && window.location.pathname !== "/signup"  &&<NavBar />}
         <Routes>
           <Route path="/" element={<HomepageApp/>}/> 
           <Route path="/hotels" element={<Hotels />} />
@@ -25,6 +25,8 @@ function App() {
           <Route path="/attractions" element={<Attractions />} />
           <Route path="/login" element={<LoginApp />} />
           <Route path="/signup" element={<SignUpApp />} />
+          <Route path="/order" element={<UserOrders />} />
+          
           {/* <Route path="/flights" /> */}
         </Routes> 
       </BrowserRouter>

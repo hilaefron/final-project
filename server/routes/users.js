@@ -11,6 +11,21 @@ router.get('/' ,async (req,res)=>{
     res.send(users);
 });
 
+
+//GET USER BY ID
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.send(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+
+
+
 //ADD NEW USER 
 router.post('/', async (req,res)=>{
   const {error}=validateUser(req.body);

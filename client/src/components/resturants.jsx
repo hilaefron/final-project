@@ -11,22 +11,27 @@ const Resturants = () => {
 
     console.log("hey from resturants")
     console.log(filteredArrayResturants)
+    
 
   return (
     <div>
-       <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Restaurants {cityName}</h1>
-
-          <select value={selectedOption} onChange={handlePrice}>
+            <select value={selectedOption} onChange={handlePrice}>
               <option >Select Type</option>
               <option value={"all"}>All</option>
-              <option value={"$"} >max of 20$</option>
-              <option value={"$-$$"} >max of 50$</option>
-              <option value={"$$"} >20$-50$</option>
-              <option value={"$$ - $$$"} >50$-100$</option>
-              <option value={"$$$"} >60$-120$</option>
-              <option value={"$$$ - $$$$"} >80$-200$</option>
-              <option value={"$$$$"} >110$-200$</option>
+              <option value={"$"} >max of 10$</option>
+              <option value={"$-$$"} >10$-15$</option>
+              <option value={"$$"} >15$-25$</option>
+              <option value={"$$ - $$$"} >25$-40$</option>
+              <option value={"$$$"} >40$-60$</option>
+              <option value={"$$$ - $$$$"} >60$-80$</option>
+              <option value={"$$$$"} >80$-100$</option>
           </select>
+          {filteredArrayResturants.length > 0 ? (
+            <div>
+       <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Restaurants {cityName}</h1>
+
+    
+   
 
       <div  style={{
           display: "flex",
@@ -66,7 +71,16 @@ const Resturants = () => {
           )})
         }
       </div>
+      </div>
+       ) : (
+        <div>
+        <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Restaurants {cityName}</h1>
     
+        <h1 style={{ display: "flex", justifyContent: "center" }}>
+        No data to present,first please search for data, after that please select a type .
+      </h1>
+        </div>
+    )}
       </div>
 );
 }

@@ -24,7 +24,8 @@ const addNewUser= async(body)=>{
         setTimeout(() => {
             setErrorMsg('You can move now to Login page 🔓 ');
             
-        }, 2000);
+        }, 3000);
+        window.location.href = "/login";
         setTimeout(() => {
             setErrorMsg('welcome there');
             

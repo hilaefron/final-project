@@ -11,7 +11,6 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
 
-
 export const HomePageContext = createContext();
 const HomePage = (props) => {
   const {children} = props;
@@ -26,9 +25,15 @@ const HomePage = (props) => {
   const [info, setInfo] = useState();
   const[filteredArray,setFilteredArray] = useState([]);
   let [num, setNum] = useState('');
+  let [numResturant, setNumResturant] = useState('');
   const [days,setDays] = useState(1);
   
+  const[changer,setChanger]= useState(0)
+
+
+
   const [loading, setLoading] = useState(false);
+
 
 
 
@@ -63,7 +68,7 @@ async function getHotels() {
           currency: 'USD'
         },
         headers: {
-          'X-RapidAPI-Key': '54021a9f4dmshc95f6be939e33fbp1e4bd2jsn62da75b88810',
+          'X-RapidAPI-Key': '7888a8319fmsh9b6a8b03bed6830p1fa47ejsnd5e8d4d3198a',
           'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
         }
       };
@@ -97,28 +102,16 @@ if (info!= undefined){
             ranking_position: val.ranking_position,
             hotel_class: val.hotel_class,
             distanceFromCenter: Math.round(val.distance*10)/10 + " KM",
-            budget:''
+            budget:'', 
+            isOrderd:false,
+            button:"add to order"
           });
         }
       });
 }
 
 
-async function updateUserOrder(val) {
-  console.log(val)
-let body = val
-  const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token);
-  const id =  decodedToken._id;
-  try {
-    const res = await axios.put(`http://localhost:4000/api/users/${id}`, {
-      body,
-    });
-    return res.body;
-  } catch (error) {
-    console.error(error);
-  }
-}
+
     
 
     useEffect(() => {
@@ -178,8 +171,10 @@ let body = val
   
         // setFilteredArray(arr)
         let anotherFilteredArray = arr
+        console.log(anotherFilteredArray);
         console.log(num + "num");
-        setNum(1);
+        setNumResturant(num);
+        // setNum(1);
         let kefel = num;
         
   
@@ -197,9 +192,28 @@ let body = val
         }
         setFilteredArray(anotherFilteredArray)
         setDays(diffDays)
+        setChanger(changer+1)
+      }
+      console.log(filteredArray)
 
-    }
-    console.log(filteredArray)
+      async function updateUserOrder(val,index) {
+      
+      let body = val
+        const token = localStorage.getItem("token");
+        const decodedToken = jwtDecode(token);
+        const id =  decodedToken._id;
+        try {
+          const res = await axios.put(`http://localhost:4000/api/users/${id}`, {
+            body,
+          });
+          console.log(res)
+          
+          getUpdatedOrder()
+          
+        } catch (error) {
+          console.error(error);
+        }
+      }
   
 
     ////////////////////////////////////////////////////resturants functionality
@@ -218,7 +232,7 @@ let body = val
               lunit: 'km'
             },
             headers: {
-              'X-RapidAPI-Key': '54021a9f4dmshc95f6be939e33fbp1e4bd2jsn62da75b88810',
+              'X-RapidAPI-Key': '7888a8319fmsh9b6a8b03bed6830p1fa47ejsnd5e8d4d3198a',
               'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
             }
           };
@@ -246,11 +260,55 @@ if(infoResturants!=undefined){
               photo:val.photo.images.large.url,
               email: val.email,
               address:val.address,
-              ranking:(" ")+ Math.round((val.raw_ranking)*10)/10+(" Stars")             
+              ranking:(" ")+ Math.round((val.raw_ranking)*10)/10+(" Stars"), 
+              budget: diffDays
             })           
         }
     })
+    const handleChangeArr=()=>{
+      let kefel = numResturant;
+console.log(kefel+"kefel from resturants");
+      for(let i=0; i<arrResturants.length; i++){
+        if(arrResturants[i].price_level == "$"){
+          arrResturants[i].price_level = "max of 10$"
+          arrResturants[i].budget = (diffDays*kefel*10)+'$'
+        }
+        if(arrResturants[i].price_level == "$-$$"){
+          arrResturants[i].price_level =  "10$-15$"
+          arrResturants[i].budget = (diffDays*kefel*15)+'$'
+
+        }
+        if(arrResturants[i].price_level == "$$"){
+          arrResturants[i].price_level =  "15$-25$"
+          arrResturants[i].budget = (diffDays*kefel*25)+'$'
+
+        }
+        if(arrResturants[i].price_level == "$$ - $$$"){
+          arrResturants[i].price_level =  "25$-40$"
+          arrResturants[i].budget = (diffDays*kefel*40)+'$'
+
+        }
+        if(arrResturants[i].price_level == "$$$"){
+          arrResturants[i].price_level = "40$-60$"
+          arrResturants[i].budget = (diffDays*kefel*60)+'$'
+
+        }
+        if(arrResturants[i].price_level == "$$$ - $$$$"){
+          arrResturants[i].price_level = "60$-80$"
+          arrResturants[i].budget = (diffDays*kefel*80)+'$'
+
+        }
+        if(arrResturants[i].price_level == "$$$$"){
+          arrResturants[i].price_level = "80$-100$"
+          arrResturants[i].budget = (diffDays*kefel*100)+'$'
+
+        }
+        
+      }
+    }
+    handleChangeArr()
 }
+
   console.log(arrResturants)
   console.log(arrResturants.length)
 
@@ -268,7 +326,7 @@ const handlePrice =(e)=>{
 
 
   if(e.target.value == "$"){
-     let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "$"); 
+     let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "max of 10$"); 
      console.log(filter)
      if(filter.length!=0){
       setFilteredArrayResturants(filter)
@@ -280,7 +338,7 @@ const handlePrice =(e)=>{
   }
 
   if(e.target.value == "$-$$"){
-    let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && (val.price_level == "$-$$"|| val.price_level == "$")); 
+    let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && (val.price_level == "10$-15$")); 
     console.log(filter)
     if(filter.length!=0){
       setFilteredArrayResturants(filter)
@@ -294,7 +352,7 @@ const handlePrice =(e)=>{
 
  
  if(e.target.value == "$$"){
-  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "$$"); 
+  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "15$-25$"); 
   console.log(filter)
   if(filter.length!=0){
    setFilteredArrayResturants(filter)
@@ -306,7 +364,7 @@ const handlePrice =(e)=>{
 }
 
  if(e.target.value == "$$ - $$$"){
-  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "$$ - $$$"); 
+  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "25$-40$"); 
   if(filter.length!=0){
     setFilteredArrayResturants(filter)
   }else{
@@ -317,7 +375,7 @@ const handlePrice =(e)=>{
 
 
 if(e.target.value == "$$$"){
-  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "$$$"); 
+  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "40$-60$"); 
   if(filter.length!=0){
     setFilteredArrayResturants(filter)
   }else{
@@ -329,7 +387,7 @@ if(e.target.value == "$$$"){
 }
 
 if(e.target.value == "$$$ - $$$$"){
-  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "$$$"); 
+  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "60$-80$"); 
   if(filter.length!=0){
     setFilteredArrayResturants(filter)
   }else{
@@ -341,7 +399,7 @@ if(e.target.value == "$$$ - $$$$"){
 }
 
 if(e.target.value == "$$$$"){
-  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "$$$$"); 
+  let filter = arrResturants.filter(val => val.price_level !== undefined && val.price_level !== "" && val.photo !== undefined && val.price_level == "80$-100$"); 
   if(filter.length!=0){
     setFilteredArrayResturants(filter)
   }else{
@@ -373,7 +431,7 @@ async function getAttraction() {
 
     },
     headers: {
-    'X-RapidAPI-Key': '54021a9f4dmshc95f6be939e33fbp1e4bd2jsn62da75b88810',
+    'X-RapidAPI-Key': '7888a8319fmsh9b6a8b03bed6830p1fa47ejsnd5e8d4d3198a',
     'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
     }
     };
@@ -433,6 +491,35 @@ function AnimatedText({ text }) {
   return <h2>{currentText}</h2>;
 }
 
+//////////////////////////////order functionallty
+const [orders, setOrders] = useState([]);
+
+async function getUpdatedOrder() {
+  console.log('getUpdatedOrder')
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
+  const id = decodedToken._id;
+  try {
+    const result = await axios.get(`http://localhost:4000/api/users/${id}`);
+    console.log(result.data.order)
+   if(result.data.order.length!=orders.length){
+     console.log("hey")
+     console.log(result.data.order);
+     setOrders(result.data.order);
+    // getUpdatedOrder()
+    }
+    
+  } catch (error) {
+    console.error(error);
+  }
+}
+// useEffect(() => {
+//   getUpdatedOrder()
+// }, []);
+
+
+
+
     return (
       //   <div>
           
@@ -482,9 +569,9 @@ function AnimatedText({ text }) {
 
       <div >
   {loading && (
-  <div style={{backgroundColor:"cornflowerblue"}}>
+  <div style={{background: "linear-gradient(to right, #DF9A71, #CC784C)"}}>
   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-    <CircularProgress style={{color:"black"}} size={80} />
+    <CircularProgress style={{color:"white"}} size={80} />
   </Box>
 {/* 
   <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50%', height: '50vh' }}>
@@ -492,7 +579,7 @@ function AnimatedText({ text }) {
     <label htmlFor="">searching for you the best results</label>
   </Box> */}
 
-<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center',height: '40vh' }}>
+<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center',height: '40vh', color:"white" }}>
  
 <AnimatedText text="Searching the best Results for YOU" />
   </Box> 
@@ -535,7 +622,7 @@ function AnimatedText({ text }) {
       </div>
 
       <HomePageContext.Provider
-        value={{ filteredArray, days, selectedOption, handlePrice, filteredArrayResturants, arrAttractions, updateUserOrder,cityName,getName,setName, setSelectedCity, getHotels, getRestaurants,getAttraction,arr,cityData,handleIn,setNum,handleRangeChange,selectedRange,lat,lng, selectedCity }}
+        value={{ filteredArray, days, selectedOption, handlePrice, filteredArrayResturants, arrAttractions, updateUserOrder,cityName,getName,setName, setSelectedCity, getHotels, getRestaurants,getAttraction,arr,cityData,handleIn,setNum,handleRangeChange,selectedRange,lat,lng, selectedCity,getUpdatedOrder,orders,setOrders, changer }}
       >
         {children}
       </HomePageContext.Provider>

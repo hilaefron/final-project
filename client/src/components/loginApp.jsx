@@ -24,18 +24,6 @@ import { AuthContext } from './login';
 import SignUpApp from './signUpApp';
 
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 function BackgroundSlideshow(props) {
   const settings = {
@@ -148,7 +136,6 @@ export default function LoginApp() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>

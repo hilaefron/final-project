@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import UserProvider from './components/signUp';
 import AuthPasswordsProvider from './components/login';
 import HomePage from './components/homePage';
-import AppLogin from './components/LoginAndSignUp';
 import FlightsContextProvider from './components/flightsContext';
 
 

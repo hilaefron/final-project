@@ -10,10 +10,16 @@ import HotelRoundedIcon from '@mui/icons-material/HotelRounded';
 import FlightRoundedIcon from '@mui/icons-material/FlightRounded';
 import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
 import { Link } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+import FolderSharedIcon from '@mui/icons-material/FolderShared';
+import { useContext } from 'react';
+import {HomePageContext} from './homePage'
 
 
 const NavBar = () => {
-  const steps = ['hotels','flights', 'restaurants', 'attractions'];
+  const {getUpdatedOrder} = useContext(HomePageContext);
+
+  const steps = ['','hotels','flights', 'restaurants', 'attractions', 'order' ];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
@@ -62,6 +68,7 @@ const NavBar = () => {
     setActiveStep(0);
     setCompleted({});
   };
+  
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -69,16 +76,19 @@ const NavBar = () => {
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>
             <Link to={`/${label}`}><StepButton color="inherit" onClick={handleStep(index)}>
-              {label=='flights'?<FlightRoundedIcon/>:
-               label=='hotels'?<HotelRoundedIcon/>:
+              {
+                label==''?<SearchIcon/>:
+                label=='hotels'?<HotelRoundedIcon/>:
+                label=='flights'?<FlightRoundedIcon/>:
                label=='restaurants'?<RestaurantRoundedIcon/>:
-               <AttractionsRoundedIcon/>
+               label=='attractions'?<AttractionsRoundedIcon/>:
+               <FolderSharedIcon onClick={getUpdatedOrder}/>
             }
             </StepButton></Link>
           </Step>
         ))}
       </Stepper>
-      <div>
+      {/* <div>
         {allStepsCompleted() ? (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1 }}>
@@ -122,7 +132,7 @@ const NavBar = () => {
             </Box>
           </React.Fragment>
         )}
-      </div>
+      </div> */}
     </Box>
   );
 }

@@ -1,23 +1,35 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect, useRef} from 'react';
 import {HomePageContext} from './homePage'
 import {DateRange} from "react-date-range";
 import NavBar from './navbar';
 import { height } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
+import img3 from './images/looking2.jpg'
 
 
 
 const HomepageApp = () => {
     const {getName,setName, setSelectedCity, getHotels, getRestaurants,getAttraction,arr,cityData,handleIn,setNum,handleRangeChange,selectedRange,lat,lng,selectedCity} = useContext(HomePageContext);
+    const navigate = useNavigate();
+    const [showDateRange, setShowDateRange] = useState(false);
+    const toggleDateRange = () => {
+      setShowDateRange(!showDateRange);
+    };
+  
+  
+
+ 
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', backgroundColor:"cadetblue", borderRadius:"26px", height:"40vh"  }}>
-        <div style={{ display: 'flex', flexDirection: 'row', marginTop:"0px"}}>
+
+        <div style={{ display:"flex", flexDirection:"row", backgroundColor:"wheat", borderRadius:"26px", height:"100vh", width:"100vw",backgroundImage:`url(${img3})`,  backgroundPositionX:"50%", backgroundPositionY:"25%" }} id="father">
+        <div style={{ display: 'flex', marginTop:"10vh", width:"100vw"}}>
       
-        <form onSubmit={e => getName(e)} style={{display: 'flex', flexDirection: 'row', marginLeft: '10px', marginTop:"10vh" }}>
+        <form onSubmit={e => getName(e)} style={{display: 'flex',flexDirection: 'row', marginLeft: '10px', height:"50vh"}}>
           <input type="text" placeholder="enter city name" onChange={e => setName(e.target.value)} id="firstInput" />
           <button type="submit" className='buttonshomepage'> get city </button>
           {selectedCity&&(
-            <select  onChange={e => setSelectedCity(e.target.value)} style={{}} >
+            <select  onChange={e => setSelectedCity(e.target.value)} className='buttonshomepage' style={{width:"300px"}} >
           {cityData.map(city => (
             <option value={city.country} >
               {city.name}, {city.country}
@@ -31,30 +43,35 @@ const HomepageApp = () => {
           </button>
         )}
         </form>
-      
-    
-      
-       
         </div>
       
       
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', marginTop:"10vh" }}>
         {arr.length !== 0 && (
-          <form id="myForm" onSubmit={e => handleIn(e)}>
-            <label>number of adults</label>
-            <input type="number" onChange={e => setNum(e.target.value)} />
-            <label>Date range:</label>
+          <form id="myForm" onSubmit={e => {handleIn(e); navigate('/hotels');}} style={{display: 'flex',flexDirection: 'row', marginLeft: '10px'}}>
+            
+            <input type="number" onChange={e => setNum(e.target.value)} id='secinput' placeholder='number of adults' />
+            <button type="button" onClick={toggleDateRange} className="buttonshomepage">
+        Show/Hide Date Range
+      </button>
+            {showDateRange && (
+            <div >
             <DateRange
               onChange={handleRangeChange}
               ranges={[selectedRange]}
               showSelectionPreview={true}
               minDate={new Date()}
-            />
-            <button type="submit">click</button>
+              />
+            <button type="submit" id='search'>Search!</button>
+              </div>
+            )}
+  
           </form>
         )}
       </div>
+      
                 </div>
+              
     );
 }
 

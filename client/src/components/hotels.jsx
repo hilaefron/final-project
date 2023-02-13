@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {HomePageContext} from './homePage'
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/esm/Button";
@@ -9,15 +9,24 @@ import { color } from '@mui/system';
 
 
 const Hotels = () => {
-const {filteredArray, days,updateUserOrder,cityName} = useContext(HomePageContext);
+const {filteredArray, days,updateUserOrder,cityName, changer} = useContext(HomePageContext);
 
+
+
+
+useEffect(() => {
+  console.log("chager");
+}, [filteredArray]);
+console.log(filteredArray)
 
 
 
 return (
   // style={{background: "linear-gradient(to right, #0466c8, #0466c8)"}}
   <div className='hotels' >
-      
+ {filteredArray.length > 0 ? (
+      <div>
+
       <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Hotels {cityName}</h1>
       <div className='hotels'
         style={{
@@ -68,9 +77,9 @@ return (
                   <Button
                     variant="dark"
                     className='hotels'
-                    onClick={() =>{updateUserOrder(val)}}
+                    onClick={() =>{updateUserOrder(val,index) }}
                   >
-                      Add to order
+                      {val.button}
                   </Button>
                   <a
                     href={`https://www.google.com/search?q=${val.name}&oq=${val.name}&aqs=chrome..69i57j69i64j69i60l3.190j0j7&sourceid=chrome&ie=UTF-8`}
@@ -90,6 +99,16 @@ return (
           );
         })}
     </div>
+    </div>
+   ) : (
+    <div>
+    <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Hotels {cityName}</h1>
+
+    <h1 style={{ display: "flex", justifyContent: "center" }}>
+    No data to present, please search for data first.
+  </h1>
+    </div>
+)}
   </div>
     );
 }
