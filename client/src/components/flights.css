@@ -1,27 +1,27 @@
 
 .container{
-    display: flex;
+  display: flex;
+  flex-wrap: wrap;
+
 }
 .card { 
-    width: 500px;
-    height: 500px;
-    margin: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-  }
-  
-  .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
-  
-  .card h3 {
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
-  
-  .card p {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
+  flex-basis: calc(20% - 30px);
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.card p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}

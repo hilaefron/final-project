@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import UserProvider from './components/signUp';
 import AuthPasswordsProvider from './components/login';
 import HomePage from './components/homePage';
-import FlightsContextProvider from './components/flightsContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,10 +14,8 @@ root.render(
     <HomePage>
       <UserProvider>
         <AuthPasswordsProvider>
-          {/* <FlightsContextProvider> */}
 
           <App/>
-          {/* </FlightsContextProvider> */}
         </AuthPasswordsProvider>
       </UserProvider>
     </HomePage>

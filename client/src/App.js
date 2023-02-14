@@ -14,10 +14,15 @@ import HomepageApp from './components/homepageApp';
 import UserOrders from './components/order';
 
 function App() {
-
   return (
-      <BrowserRouter>
-  {window.location.pathname !== "/login" && window.location.pathname !== "/signup"  &&<NavBar />}
+    <div style={{backgroundImage: "url(https://fastly.picsum.photos/id/13/2500/1667.jpg?hmac=SoX9UoHhN8HyklRA4A3vcCWJMVtiBXUg0W4ljWTor7s)",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    backgroundAttachment: 'fixed',
+    height: '1000vh'
+    }}>
+      <BrowserRouter >
+  {window.location.pathname !== "/login" && window.location.pathname !== "/signup"   &&<NavBar />}
         <Routes>
           <Route path="/" element={<HomepageApp/>}/> 
           <Route path="/hotels" element={<Hotels />} />
@@ -27,14 +32,10 @@ function App() {
           <Route path="/signup" element={<SignUpApp />} />
           <Route path="/order" element={<UserOrders />} />
           
-          {/* <Route path="/flights" /> */}
+          <Route path="/flights" element={<Flights/>}/>
         </Routes> 
       </BrowserRouter>
-      // <div>
-      // <SignUpApp/>
-      // <LoginApp/>
-      // </div>
-
+      </div>
 
   )
 }

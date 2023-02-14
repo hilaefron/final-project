@@ -4,96 +4,55 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/esm/Button";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { Link } from 'react-router-dom';
 
 const Attractions = () => {
 const {arrAttractions, updateUserOrder,cityName} = useContext(HomePageContext);
 
 
 return (
-    <div className='Attractions'>
-                {arrAttractions.length > 0 ? (
-                  <div>
-
-                  
-
-<h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Attractions {cityName}</h1>      
-  <div style={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",}}>
-
-  
+<div >
+  {arrAttractions.length > 0 ? (
+    <div>
+      <h1 style={{display:'flex', justifyContent: 'center',fontFamily:'abel',fontSize:'4em', fontWeight:'bold',marginTop:'5vh',letterSpacing: '2px' }}>Attractions {cityName}</h1>
+      <div style={{ display:'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {arrAttractions.map((val, index) => {
           return (
-            <div className='Attractions' style={{display: "flex",  justifyContent: "center"}}>
-              <Card
-               style={{
-                border: "solid black",
-              }}
-              >
+              <Card  style={{flexBasis: 'calc(30% - 20px)', margin: '10px',backgroundColor:'rgb(147 165 175)' }}>
                 <Card.Body>
-                  <Card.Title>Attreactions</Card.Title>
+                  <Card.Title>{val.name}</Card.Title>
                   <Card.Text>
-                    <span style={{ fontFamily: "Solitreo" }}>Name:</span>{" "}
-                    {val.name}
+                    <span >Rating:</span> {val.rating}
                     <br />
-                    <span style={{ fontFamily: "Solitreo" }}>rating:</span>
-                    {val.rating}
+                    <span >Address:</span> {val.address}
                     <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                      Address:
-                    </span>{" "}
-                    {val.address}
+                    <span >Phone:</span> {val.phone}
                     <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                      phone:
-                    </span>{" "}
-                    {val.phone}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                        web url
-                      </span>{" "}
-                    {val.web_url}
+                    <span >Web URL:</span> {val.web_url}
                   </Card.Text>
-                 <Button
-                    variant="dark"
-                    className='hotels'
-                    onClick={() =>{updateUserOrder(val)}}
-                  >
-                    
-                    Add this hotel to my list!
-                    
-                  </Button>
-                  <a
-                    href={`https://www.google.com/search?q=${val.name}&oq=${val.name}&aqs=chrome..69i57j69i64j69i60l3.190j0j7&sourceid=chrome&ie=UTF-8`}
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    <button
-                      className="btn btn-outline-primary"
-                      style={{ border: "none" }}
-                    >
-                      {" "}
-                      Learn more
-                    </button>
-                  </a>
                 </Card.Body>
+                  <Button
+                   onClick={() => { updateUserOrder(val) }} 
+                   style={{backgroundColor:'rgb(99 137 141)',borderColor:'#05060800',marginBottom:'0.5em'}}>
+                    Add to My Order
+                  </Button>
+
+                  <Button style={{backgroundColor:'rgb(99 137 141)',borderColor:'#05060800',marginBottom:'0.5em'}}>
+                    <a href={`https://www.google.com/search?q=${val.name}&oq=${val.name}&aqs=chrome..69i57j69i64j69i60l3.190j0j7&sourceid=chrome&ie=UTF-8`} 
+                    style={{color:'#fff',textDecorationLine:'none'}}>
+                    Learn More
+                  </a></Button>
               </Card>
-            </div>
           );
         })}
       </div>
-      </div>
-            ) : (
-              <div>
-              <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Attractions {cityName}</h1>
-          
-              <h1 style={{ display: "flex", justifyContent: "center" }}>
-              No data to present, please search for data first.
-            </h1>
-              </div>
-          )}
-        </div>
+    </div>
+  ) : (
+    <div>
+      <h1 style={{ display: "flex", justifyContent: "center", fontFamily: "Abel", letterSpacing: "2px", marginTop: "5vh" }}>Attractions {cityName}</h1>
+      <h1 style={{ display: "flex", justifyContent: "center" }}>No data to present, please search for data first.</h1>
+    </div>
+  )}
+</div>
         
     );
 }

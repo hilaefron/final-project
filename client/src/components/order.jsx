@@ -3,203 +3,240 @@ import {HomePageContext} from './homePage'
 import  Card  from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/esm/Button';
 import 'react-date-range/dist/styles.css'; // main style file
-import axios from 'axios';
-import jwtDecode from 'jwt-decode';
-// import { useNavigate } from 'react-router-dom';
 
 const UserOrders = () => {
-  const {orders, updateUserOrder, getUpdatedOrder,setOrders} = useContext(HomePageContext);
+  const {orders, updateUserOrder, num,numFlights,days,getUpdatedOrder,setOrders, handleSecondButtonClick, handleSecondButtonClickResturants} = useContext(HomePageContext);
   const [newArr, setNewArr]=useState(orders)
-  
-//   const navigate = useNavigate();
-//   const navigateAttractions = () => {
-//     navigate("/attractions");
-//   };
-//   const navigateHotels = () => {
-//     navigate("/hotels");
-//   };
-//   const navigateRestaurants = () => {
-//     navigate("/restaurants");
-//   };
+  let budget = 0;
 
+  const flightOrder = orders.find(order => order.body.flight);
+  const flightData = flightOrder?.body?.flight; // optional chaining to avoid error if flightOrder is undefined
+  
+  console.log(flightOrder);
+  console.log(flightData);
+  console.log(orders);
+
+  for (let i = 0; i < orders.length; i++) {
+    if(orders[i].body.budget){
+      if(!orders[i].body.flight){
+        let num = orders[i].body.budget;
+        num = parseFloat(orders[i].body.budget.replace("$", ""));
+        budget = budget+num
+        console.log(num);
+      }
+      else{
+        let num = orders[i].body.budget;
+        num = parseInt(orders[i].body.budget);
+        budget = budget+num
+        console.log(num);
+      }
+    }
+  }
 useEffect(() => {
     getUpdatedOrder()
   }, [orders]);
+
   return (
     <div>
-      <div>
-        <h1>Restaurants:</h1>
-        {/* <button onClick={()=>navigateRestaurants()}>Go Back To Restaurants</button> */}
-        {orders.map(order => {
-          if (order.body.category) {
-            return (
-              <div style={{display: "flex",  justifyContent: "center"}}>              
-                <Card   
-                   style={{
-                    width: "37.44%",
-                    height: "100%",
-                    border: "solid black",
-                  }}>
-                  <Card.Img variant="top" src={order.body.photo} style={{ width: "100%", height: "40vh" }}/>
-                  <Card.Body>
-                    <Card.Title>Resturants</Card.Title>
-                    <Card.Text >
-                      <span style={{fontFamily:"Solitreo"}}>Name:</span> {order.body.name}
-                      <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Ranking:</span>{order.body.ranking}
-                      <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Phone:</span> {order.body.phone}
-                      <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Category:</span> {order.body.category}
-                      <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Address:</span> {order.body.address}
-                      <br/>
-                      <span style={{fontFamily:"Solitreo"}}>price level:</span> {order.body.price_level}
-                    </Card.Text>
-                    <Button variant="dark"  onClick={() =>{updateUserOrder(order.body);}}>Delete From Order</Button>
-                  </Card.Body>
-              </Card>
-            </ div>
-            );
-          }
-          return null;
-        })}
-      </div>
-      <div>
-        <h1>Hotels:</h1>
-        {/* <button onClick={()=>navigateHotels()}>Go Back To Hotels</button> */}
-        {orders.map(order => {
-          if (order.body.hotel_class) {
-            return (
-              <div className='hotels' style={{  display: "flex",  justifyContent: "center",}}>
-              <Card
-                style={{
-                  width: "37.44%",
-                  height: "100%",
-                  border: "solid black",
-                }}
+          <div style={{display:'flex',justifyContent:'end', margin:'1em'}}>
+            <Button style={{backgroundColor:'rgb(99 137 141)', borderColor:'#05060800', marginBottom:'0.5em'}} onClick={()=>{localStorage.removeItem('token');alert('You are logged out!')}} >
+               Log Out
+            </Button></div>
+
+              <h1 style={{display:'flex',justifyContent:'center',flexFlow:'center'}}>Your budget for {days+1} days ({days} nights) {numFlights} people : <br/>{budget}$</h1>
+
+              <div>
+  <h1 style={{display:'flex', justifyContent: 'center', fontFamily:'abel', fontSize:'4em', fontWeight:'bold', marginTop:'5vh', letterSpacing: '2px' }}>Restaurants:</h1>
+  <div className="card-container" style={{ display:'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+    {orders.map((order, index) => {
+      if (order.body.category) {
+        return (
+          <Card style={{flexBasis: 'calc(30% - 20px)', margin: '10px', backgroundColor:'rgb(147 165 175)' }}>
+            <Card.Img variant="top" src={order.body.photo} style={{ height: '200px', objectFit: 'cover' }} />
+            <Card.Body>
+              <Card.Text>
+                <span>Name:</span> {order.body.name}
+                <br />
+                <span>Ranking:</span> {order.body.ranking}
+                <br />
+                <span>Phone:</span> {order.body.phone}
+                <br />
+                <span>Category:</span> {order.body.category}
+                <br />
+                <span>Address:</span> {order.body.address}
+                <br />
+                <span>Price level:</span> {order.body.price_level}
+              </Card.Text>
+            </Card.Body>
+              <Button
+                variant="dark"
+                onClick={() => {updateUserOrder(order.body, index); alert('you can move to my order (6) to see your choices'); handleSecondButtonClickResturants()}}
+                style={{backgroundColor:'rgb(99 137 141)', borderColor:'#05060800', marginBottom:'0.5em'}}
               >
-                <Card.Img
-                  variant="top"
-                  src={order.body.photo}
-                  style={{ width: "100%", height: "40vh" }}
-                />
-                <Card.Body>
-                  <Card.Title>Hotels</Card.Title>
-                  <Card.Text>
-                    <span style={{ fontFamily: "Solitreo" }}>Name:</span>{" "}
-                    {order.body.name}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>Ranking:</span>
-                    {order.body.ranking}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                      Hotel Class:
-                    </span>{" "}
-                    {order.body.hotel_class}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                      Distance from center:
-                    </span>{" "}
-                    {order.body.distanceFromCenter}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                      price (for one night before insert details):
-                      </span>{" "}
-                    {order.body.price}
-                  </Card.Text>
-                  <Button
-                    variant="dark"
-                    className='hotels'
-                    onClick={() =>{updateUserOrder(order.body); }}
-                  >
-                      Delete From Order
-                  </Button>
-                  <a
-                    href={`https://www.google.com/search?q=${order.body.name}&oq=${order.body.name}&aqs=chrome..69i57j69i64j69i60l3.190j0j7&sourceid=chrome&ie=UTF-8`}
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    <button
-                      className="btn btn-outline-primary"
-                      style={{ border: "none" }}
-                    >
-                      {" "}
-                      Learn more
-                    </button>
-                  </a>
-                </Card.Body>
-              </Card>
-            </div>
-            );
-          }
-        return null;
-        })}
-      </div>
-      <div>
-        <h1>attractions:</h1>
-        {/* <button onClick={()=>navigateAttractions()}>Go Back To Attractions</button> */}
-        {orders.map(order => {
-          if (order.body.web_url) {
-            return (
-              <div className='Attractions' style={{display: "flex",  justifyContent: "center"}}>
-              <Card
-               style={{
-                border: "solid black",
-              }}
+                Delete From Order
+              </Button>
+          </Card>
+        );
+      }
+      return null;
+    })}
+  </div>
+              </div>
+              <div>
+                <h1 style={{display:'flex', justifyContent: 'center', fontFamily:'abel', fontSize:'4em', fontWeight:'bold', marginTop:'5vh', letterSpacing: '2px' }}>Hotels:</h1>
+                <div className="card-container" style={{ display:'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  {orders.map((order, index) => {
+                    if (order.body.hotel_class) {
+                      return (
+                        <Card style={{flexBasis: 'calc(30% - 20px)', margin: '10px', backgroundColor:'rgb(147 165 175)' }}>
+                          <Card.Img variant="top" src={order.body.photo} style={{ height: '200px', objectFit: 'cover' }} />
+                          <Card.Body>
+                            <Card.Title>Hotels</Card.Title>
+                            <Card.Text>
+                              <span>Name:</span> {order.body.name}
+                              <br />
+                              <span>Ranking:</span> {order.body.ranking}
+                              <br />
+                              <span>Hotel Class:</span> {order.body.hotel_class}
+                              <br />
+                              <span>Distance from center:</span> {order.body.distanceFromCenter}
+                              <br />
+                              <span>Price (for one night before insert details):</span> {order.body.price}
+                            </Card.Text>
+                          </Card.Body>
+                            <Button
+                              variant="dark"
+                              onClick={() => {updateUserOrder(order.body, index); handleSecondButtonClick() }}
+                              style={{backgroundColor:'rgb(99 137 141)', borderColor:'#05060800', marginBottom:'0.5em'}}
+                            >
+                              Delete From Order
+                            </Button>
+                        </Card>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              </div>
+              <div>
+  <h1 style={{display:'flex', justifyContent: 'center', fontFamily:'abel', fontSize:'4em', fontWeight:'bold', marginTop:'5vh', letterSpacing: '2px' }}>Attractions:</h1>
+  <div className="card-container" style={{ display:'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+    {orders.map((order, index) => {
+      if (order.body.web_url) {
+        return (
+          <Card style={{flexBasis: 'calc(30% - 20px)', margin: '10px', backgroundColor:'rgb(147 165 175)' }}>
+            <Card.Body>
+              <Card.Text>
+                <span>Name:</span> {order.body.name}
+                <br />
+                <span>Rating:</span> {order.body.rating}
+                <br />
+                <span>Phone:</span> {order.body.phone}
+                <br />
+                <span>Address:</span> {order.body.address}
+                <br />
+                <span>Web URL:</span> {order.body.web_url}
+              </Card.Text>
+            </Card.Body>
+              <Button
+                variant="dark"
+                onClick={() => {updateUserOrder(order.body, index); alert('you can move to my order (6) to see your choices');}}
+                style={{backgroundColor:'rgb(99 137 141)', borderColor:'#05060800', marginBottom:'0.5em'}}
               >
-                <Card.Body>
-                  <Card.Title>Attreactions</Card.Title>
-                  <Card.Text>
-                    <span style={{ fontFamily: "Solitreo" }}>Name:</span>{" "}
-                    {order.body.name}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>rating:</span>
-                    {order.body.rating}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                      Address:
-                    </span>{" "}
-                    {order.body.address}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                      phone:
-                    </span>{" "}
-                    {order.body.phone}
-                    <br />
-                    <span style={{ fontFamily: "Solitreo" }}>
-                        web url
-                      </span>{" "}
-                    {order.body.web_url}
-                  </Card.Text>
-                 <Button
-                    variant="dark"
-                    className='hotels'
-                    onClick={() =>{updateUserOrder(order.body);}}
-                  >
-                    Delete From Order
-                  </Button>
-                  <a
-                    href={`https://www.google.com/search?q=${order.body.name}&oq=${order.body.name}&aqs=chrome..69i57j69i64j69i60l3.190j0j7&sourceid=chrome&ie=UTF-8`}
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    <button
-                      className="btn btn-outline-primary"
-                      style={{ border: "none" }}
-                    >
-                      {" "}
-                      Learn more
-                    </button>
-                  </a>
-                </Card.Body>
-              </Card>
-            </div>
-            );
-          }
-        return null;
-        })}
-      </div>
+                Delete From Order
+              </Button>
+          </Card>
+        );
+      }
+      return null;
+    })}
+  </div>
+</div>           <div>
+        <h1 style={{display:'flex', justifyContent: 'center', fontFamily:'abel', fontSize:'4em', fontWeight:'bold', marginTop:'5vh', letterSpacing: '2px' }}>Flights: </h1>
+      {flightData? (
+        <div className="card-container" style={{ display:'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{flexBasis: 'calc(30% - 20px)', margin: '10px', backgroundColor:'rgb(147 165 175)' }}>
+            {flightData.legs
+              ? flightData.legs.map((leg, legIndex) => {
+                  return (
+                    <Card key={legIndex}>
+                      <Card.Body>
+                        <Card.Text>
+                      <p>Departure: {leg.departure.split("T")[1].slice(0, -3)} (local time)</p>
+                      <p>Arrival: {leg.arrival.split("T")[1].slice(0, -3)} (local time)</p>
+                      <p>Total Duration: {Math.floor(leg.duration / 60)} h {leg.duration % 60} m</p>
+                      {leg.stops.length > 0 ? (
+                        <div>
+                          <p>Stops: {leg.stop_count} </p>
+                          <p>
+                            Stop At:{" "}
+                            {leg.stops.map(s => {
+                              if (s.name === undefined || s.type === undefined || s.display_code === undefined) {
+                                return <li>{"No info about this stop"}</li>;
+                              } else {
+                                return <li>{`${s.name} ${s.type} (${s.display_code})`}</li>;
+                              }
+                            })}
+                          </p>
+                          {leg.carriers.length > 1 ? (
+                            <div>
+                              Carriers:
+                              {leg.carriers.map((carrier, carrierIndex) => {
+                                return (
+                                  <p>
+                                    <li>leg {[carrierIndex + 1]} : {carrier.name}</li>
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <div>
+                              Carrier:
+                              {leg.carriers.map(carrier => {
+                                return (
+                                  <p>
+                                    <li>{carrier.name}</li>
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div>
+                          Carrier:
+                          {leg.carriers.map(carrier => {
+                            return (
+                              <p>
+                                <li>{carrier.name}</li>
+                              </p>
+                            );
+                          })}
+                        </div>
+                      )}
+            </Card.Text>
+            </Card.Body>
+            </Card>
+                  );
+                })
+              : null}
+            <p>
+              Total Price: {Math.ceil(flightData.price.amount)}$
+              <br />
+            </p>
+            <Button 
+                            style={{backgroundColor:'rgb(99 137 141)', borderColor:'#05060800', marginBottom:'0.5em'}}
+                            
+                            onClick={() => {updateUserOrder(flightData)}}>Remove flight</Button>
+          </div>
+        </div>
+      ) : (
+        <div>No flight data available</div>
+      )}
     </div>
-  );
+
+</div>
+      );
 };
 
 

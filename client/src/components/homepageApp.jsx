@@ -22,7 +22,17 @@ const HomepageApp = () => {
 
     return (
 
-        <div style={{ display:"flex", flexDirection:"row", backgroundColor:"wheat", borderRadius:"26px", height:"100vh", width:"100vw",backgroundImage:`url(${img3})`,  backgroundPositionX:"50%", backgroundPositionY:"25%" }} id="father">
+        <div 
+        style={{     backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundAttachment: 'fixed',
+        backgroundImage:`url(${img3})`,
+        marginTop:'-10vh',
+        paddingTop:'5vh',
+        height: '1000vh',
+        display:'flex'
+     }}
+         id="father">
         <div style={{ display: 'flex', marginTop:"10vh", width:"100vw"}}>
       
         <form onSubmit={e => getName(e)} style={{display: 'flex',flexDirection: 'row', marginLeft: '10px', height:"50vh"}}>

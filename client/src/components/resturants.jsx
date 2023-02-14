@@ -6,16 +6,18 @@ import {HomePageContext} from './homePage'
 import { Link } from 'react-router-dom';
 
 const Resturants = () => {
-    const {selectedOption, handlePrice, filteredArrayResturants,updateUserOrder, cityName} = useContext(HomePageContext);
+    const {selectedOption, handlePrice, filteredArrayResturants,updateUserOrder, cityName, isDisabledResturants, setIsDisabledResturants, handleFirstButtonClickResturants} = useContext(HomePageContext);
 
+    const e = { target: { value: 'all' } };
 
     console.log("hey from resturants")
     console.log(filteredArrayResturants)
     
-
   return (
-    <div>
-            <select value={selectedOption} onChange={handlePrice}>
+    <div >
+         <div style={{display:'flex', justifyContent:"center"}}>
+
+         <select value={selectedOption} onChange={handlePrice}  className='buttonshomepage' style={{  width:"30%", marginTop:"5%"}} >
               <option >Select Type</option>
               <option value={"all"}>All</option>
               <option value={"$"} >max of 10$</option>
@@ -26,50 +28,44 @@ const Resturants = () => {
               <option value={"$$$ - $$$$"} >60$-80$</option>
               <option value={"$$$$"} >80$-100$</option>
           </select>
+          </div>
+          
           {filteredArrayResturants.length > 0 ? (
             <div>
        <h1  style={{  display: "flex",  justifyContent: "center", fontFamily:"Abel"}}>Restaurants {cityName}</h1>
-
-    
-   
-
       <div  style={{
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",}}
           >
-        
+            <div className="card-container" style={{ display:'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+
+                            
         {filteredArrayResturants.map((val, index)=>{
           return (
-              <div style={{display: "flex",  justifyContent: "center"}}>              
-                <Card   
-                   style={{
-                    width: "37.44%",
-                    height: "100%",
-                    border: "solid black",
-                  }}>
-                  <Card.Img variant="top" src={val.photo} style={{ width: "100%", height: "40vh" }}/>
+                <Card style={{flexBasis: 'calc(30% - 20px)', margin: '10px',backgroundColor:'rgb(147 165 175)' }}>                  
+                  <Card.Img variant="top" src={val.photo} style={{ height: '200px', objectFit: 'cover' }}/>
                   <Card.Body>
-                    <Card.Title>Resturants</Card.Title>
                     <Card.Text >
-                      <span style={{fontFamily:"Solitreo"}}>Name:</span> {val.name}
+                      <span >Name:</span> {val.name}
                       <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Ranking:</span>{val.ranking}
+                      <span >Ranking:</span>{val.ranking}
                       <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Phone:</span> {val.phone}
+                      <span >Phone:</span> {val.phone}
                       <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Category:</span> {val.category}
+                      <span >Category:</span> {val.category}
                       <br/>
-                      <span style={{fontFamily:"Solitreo"}}>Address:</span> {val.address}
+                      <span >Address:</span> {val.address}
                       <br/>
-                      <span style={{fontFamily:"Solitreo"}}>price level:</span> {val.price_level}
+                      <span >price level:</span> {val.price_level}
+                      <br />
                     </Card.Text>
-                    <Button variant="dark"  onClick={() =>{updateUserOrder(val)}}>Add this hotel to my list!</Button>
                   </Card.Body>
+                    <Button variant="dark" style={{backgroundColor:'rgb(99 137 141)',borderColor:'#05060800',marginBottom:'0.5em'}} onClick={() =>{updateUserOrder(val); alert('you can move to my order (6) to see your choices'); handleFirstButtonClickResturants()}}  disabled={isDisabledResturants}>Add to My order</Button>
               </Card>
-            </ div>
           )})
         }
+        </div>
       </div>
       </div>
        ) : (
@@ -86,7 +82,6 @@ const Resturants = () => {
 }
 
 export default Resturants;
-
 
 
 

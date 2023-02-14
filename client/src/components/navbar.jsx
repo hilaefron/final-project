@@ -9,7 +9,7 @@ import AttractionsRoundedIcon from '@mui/icons-material/AttractionsRounded';
 import HotelRoundedIcon from '@mui/icons-material/HotelRounded';
 import FlightRoundedIcon from '@mui/icons-material/FlightRounded';
 import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import { useContext } from 'react';
@@ -18,10 +18,11 @@ import {HomePageContext} from './homePage'
 
 const NavBar = () => {
   const {getUpdatedOrder} = useContext(HomePageContext);
-
+  const navigate=useNavigate()
   const steps = ['','hotels','flights', 'restaurants', 'attractions', 'order' ];
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
+
 
   const totalSteps = () => {
     return steps.length;
@@ -53,8 +54,10 @@ const NavBar = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleStep = (step) => () => {
+  const handleStep = (step,label) => {
     setActiveStep(step);
+    navigate(`/${label}`)
+
   };
 
   const handleComplete = () => {
@@ -72,10 +75,11 @@ const NavBar = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
+
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>
-            <Link to={`/${label}`}><StepButton color="inherit" onClick={handleStep(index)}>
+            <StepButton color="inherit" onClick={()=>handleStep(index,label)}>
               {
                 label==''?<SearchIcon/>:
                 label=='hotels'?<HotelRoundedIcon/>:
@@ -84,55 +88,10 @@ const NavBar = () => {
                label=='attractions'?<AttractionsRoundedIcon/>:
                <FolderSharedIcon onClick={getUpdatedOrder}/>
             }
-            </StepButton></Link>
+            </StepButton>
           </Step>
         ))}
       </Stepper>
-      {/* <div>
-        {allStepsCompleted() ? (
-          <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you're finished
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-              Step {activeStep + 1} :{steps[activeStep]}
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Link to={`/${steps[activeStep+1]}`}><Button onClick={handleNext} sx={{ mr: 1 }}>
-                Next
-              </Button></Link>
-              {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button onClick={handleComplete}>
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Finish' 
-                      : 'Complete Step'}
-                  </Button>
-                ))}
-            </Box>
-          </React.Fragment>
-        )}
-      </div> */}
     </Box>
   );
 }
