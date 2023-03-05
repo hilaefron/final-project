@@ -19,7 +19,7 @@ function App() {
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     backgroundAttachment: 'fixed',
-    height: '1000vh'
+    minHeight: '100vh'
     }}>
       <BrowserRouter >
   {window.location.pathname !== "/login" && window.location.pathname !== "/signup"   &&<NavBar />}
